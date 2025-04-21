@@ -9,116 +9,116 @@
 
 ### Implementation
 1. Subscriber class (as different types of class(Android, IOS etc) can be subscribers. We will make is general.)
-```java
-package behavioral.obserever;
+    ```java
+    package behavioral.obserever;
 
-import java.util.Objects;
+    import java.util.Objects;
 
-// Subscriber. I am making this abstract just to centralize equals and hashCode methods. Use inteface if possible
-public abstract class Device implements Comparable<Device> {
+    // Subscriber. I am making this abstract just to centralize equals and hashCode methods. Use inteface if possible
+    public abstract class Device implements Comparable<Device> {
 
-    private long id;
-    public Device(long id) {
-        this.id = id;
+        private long id;
+        public Device(long id) {
+            this.id = id;
+        }
+
+        public abstract void onMessageReceived(String topic, String message);
+        public long getId(){
+            return id;
+        }
+
+
+        @Override
+        public int compareTo(Device o) {
+            return Long.compare(id, o.id);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if( !(obj instanceof Device) ) return false;
+
+            Device device = (Device) obj;
+            return id == device.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+        }
+
     }
-
-    public abstract void onMessageReceived(String topic, String message);
-    public long getId(){
-        return id;
-    }
-
-
-    @Override
-    public int compareTo(Device o) {
-        return Long.compare(id, o.id);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if( !(obj instanceof Device) ) return false;
-
-        Device device = (Device) obj;
-        return id == device.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-}
-```
+    ```
 
 2. Few concrete class of Subscriber
-2a. Android
-```java
-package behavioral.obserever;
+    1. Android
+        ```java
+        package behavioral.obserever;
 
-// Concrete subscriber class
-public class Android extends Device{
+        // Concrete subscriber class
+        public class Android extends Device{
 
-    public Android(long id) {
-        super(id);
-    }
+            public Android(long id) {
+                super(id);
+            }
 
-    @Override
-    public void onMessageReceived(String topic, String message) {
-        System.out.println("Android (" + getId() + ") received message: " + message +" from topic: " + topic);
-    }
-}
-```
-2b. IOS
-```java
-package behavioral.obserever;
+            @Override
+            public void onMessageReceived(String topic, String message) {
+                System.out.println("Android (" + getId() + ") received message: " + message +" from topic: " + topic);
+            }
+        }
+        ```
+    2. IOS
+        ```java
+        package behavioral.obserever;
 
-// Concrete subscriber class
-public class IOS extends Device{
+        // Concrete subscriber class
+        public class IOS extends Device{
 
-    public IOS(long id) {
-        super(id);
-    }
+            public IOS(long id) {
+                super(id);
+            }
 
-    @Override
-    public void onMessageReceived(String topic, String message) {
-        System.out.println("IOS (" + getId() + ") received message: " + message +" from topic: " + topic);
-    }
-    
-}
-```
+            @Override
+            public void onMessageReceived(String topic, String message) {
+                System.out.println("IOS (" + getId() + ") received message: " + message +" from topic: " + topic);
+            }
+            
+        }
+        ```
 
 3. Notification service
-```java
-package behavioral.obserever;
+    ```java
+    package behavioral.obserever;
 
-import java.util.*;
+    import java.util.*;
 
-// publisher class
-public class NotificationService {
+    // publisher class
+    public class NotificationService {
 
-    // topic -> List of subscribers
-    private Map<String, Set<Device>> subscribersMap = new TreeMap<>();
-    
-
-    public void subscribe(String topic, Device device){
-        subscribersMap.computeIfAbsent(topic, v -> new TreeSet<>()).add(device);
-    }
-
-    public void unsubscribe(String topic, Device device){
-        subscribersMap.computeIfAbsent(topic, v-> new TreeSet<>()).remove(device);
-    }
-
-    public void publish(String topic, String message){
-        Set<Device> subscribers = subscribersMap.getOrDefault(topic, new TreeSet<>());
+        // topic -> List of subscribers
+        private Map<String, Set<Device>> subscribersMap = new TreeMap<>();
         
-        System.out.println("Sending notification to "+subscribers.size()+" subscribers for topic: "+topic);
-        for(Device device : subscribers){
-            device.onMessageReceived(topic, message);
-        }
-    }
 
-}
-```
+        public void subscribe(String topic, Device device){
+            subscribersMap.computeIfAbsent(topic, v -> new TreeSet<>()).add(device);
+        }
+
+        public void unsubscribe(String topic, Device device){
+            subscribersMap.computeIfAbsent(topic, v-> new TreeSet<>()).remove(device);
+        }
+
+        public void publish(String topic, String message){
+            Set<Device> subscribers = subscribersMap.getOrDefault(topic, new TreeSet<>());
+            
+            System.out.println("Sending notification to "+subscribers.size()+" subscribers for topic: "+topic);
+            for(Device device : subscribers){
+                device.onMessageReceived(topic, message);
+            }
+        }
+
+    }
+    ```
 
 And it's done.
 

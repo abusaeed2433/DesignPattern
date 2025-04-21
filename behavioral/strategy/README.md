@@ -10,80 +10,80 @@ To solve this issue, we create separate class for each of the sorting algorithm.
 
 ### Implementation
 1. Strategy interface
-```java
-package behavioral.strategy;
+    ```java
+    package behavioral.strategy;
 
-public interface SortStrategy {
-    void sort(int[] arr);
-}
-```
+    public interface SortStrategy {
+        void sort(int[] arr);
+    }
+    ```
 2. Few concrete strategies
-2a. BubbleSort
-```java
-package behavioral.strategy;
+    1. BubbleSort
+        ```java
+        package behavioral.strategy;
 
-import java.util.Arrays;
+        import java.util.Arrays;
 
-public class BubbleSort implements SortStrategy{
+        public class BubbleSort implements SortStrategy{
 
-    @Override
-    public void sort(int[] arr) {
-        Arrays.sort(arr); // Using default sort for simplicity        
-    }
-    
-}
-```
-2b. QuickSort
-```java
-package behavioral.strategy;
+            @Override
+            public void sort(int[] arr) {
+                Arrays.sort(arr); // Using default sort for simplicity        
+            }
+            
+        }
+        ```
+    2. QuickSort
+        ```java
+        package behavioral.strategy;
 
-import java.util.Arrays;
+        import java.util.Arrays;
 
-public class QuickSort implements SortStrategy{
+        public class QuickSort implements SortStrategy{
 
-    @Override
-    public void sort(int[] arr) {
-        Arrays.sort(arr); // Using default sort for simplicity
-    }
-    
-}
-```
-2c. MergeSort
-```java
-package behavioral.strategy;
+            @Override
+            public void sort(int[] arr) {
+                Arrays.sort(arr); // Using default sort for simplicity
+            }
+            
+        }
+        ```
+    3. MergeSort
+        ```java
+        package behavioral.strategy;
 
-import java.util.Arrays;
+        import java.util.Arrays;
 
-public class MergeSort implements SortStrategy{
+        public class MergeSort implements SortStrategy{
 
-    @Override
-    public void sort(int[] arr) {
-        Arrays.sort(arr);
-    }
-}
-```
+            @Override
+            public void sort(int[] arr) {
+                Arrays.sort(arr);
+            }
+        }
+        ```
 3. Context class
-```java
-package behavioral.strategy;
+    ```java
+    package behavioral.strategy;
 
-public class SortContext {
-    
-    private SortStrategy strategy;
+    public class SortContext {
+        
+        private SortStrategy strategy;
 
-    public SortContext() {
-        this.strategy = new QuickSort();
+        public SortContext() {
+            this.strategy = new QuickSort();
+        }
+
+        public void setStrategy(SortStrategy strategy) {
+            this.strategy = strategy;
+        }
+
+        public void sort(int[] arr) {
+            strategy.sort(arr);
+        }
+
     }
-
-    public void setStrategy(SortStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public void sort(int[] arr) {
-        strategy.sort(arr);
-    }
-
-}
-```
+    ```
 
 And it's done.
 
@@ -130,6 +130,6 @@ Sorting using MergeSort:
 ```
 
 ### Definition again
-Strategy is a behavioral design pattern that lets us define a family of algorithms(`BubbleSort`, `QuickSort`, `MergeSort`), put each of them into a separate class, and make their objects interchangeable(though the strategy interface `SortStrategy`).
+Strategy is a behavioral design pattern that lets us define a family of algorithms, put each of them into a separate class (`BubbleSort`, `QuickSort`, `MergeSort`), and make their objects interchangeable(though the strategy interface `SortStrategy`).
 
 Let's learn together!!!
