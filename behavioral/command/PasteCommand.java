@@ -8,9 +8,9 @@ public class PasteCommand extends Command {
 
     @Override
     public boolean execute() {
-        backup();
-        editor.setText( editor.getText() + "sound"); // Just using a fixed string for simplicity
-        return true; // will get saved in commanded history
+        backup(); // storing current data for undo operation
+        editor.setText( editor.getText() + editor.getClipboard());
+        return true; // will get saved in command history
     }
     
 }

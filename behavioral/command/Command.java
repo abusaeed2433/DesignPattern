@@ -2,7 +2,7 @@ package behavioral.command;
 
 public abstract class Command {
     
-    protected Editor editor;
+    protected Editor editor; // reference to editor
     private String backup;
 
     public Command(Editor editor) {
@@ -10,11 +10,11 @@ public abstract class Command {
     }
 
     public void backup() {
-        backup = editor.getClipboard();
+        backup = editor.getText(); // saving currently shown data
     }
 
     public void undo() {
-        editor.setText(backup);
+        editor.setText(backup); //showing previous content
     }
 
     public abstract boolean execute();
